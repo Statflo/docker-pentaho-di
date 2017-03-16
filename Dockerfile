@@ -13,8 +13,8 @@ ARG PDI_DOWNLOAD_URL="http://downloads.sourceforge.net/project/pentaho/Data%20In
 ARG MYSQL_CONNECTOR_DOWNLOAD_URL="https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-$MYSQL_CONNECTOR_VERSION.tar.gz"
 
 # Read only variables
-ENV KETTLE_HOME      "/etc/pdi"
-ENV PDI_HOME         "$PDI_HOME"
+ENV PDI_PATH         "/etc/pdi"
+ENV KETTLE_HOME      "$PDI_PATH"
 ENV PDI_VERSION      "$PDI_VERSION"
 ENV PATH             "$PATH:$PDI_HOME"
 ENV CART_TEMPLATES   "$PENTAHO_DIR/templates/carte"
@@ -48,7 +48,7 @@ RUN curl -L "$PDI_DOWNLOAD_URL" -o "/tmp/pdi-ce-$PDI_VERSION.zip" && \
     rm "/tmp/pdi-ce-$PDI_VERSION.zip" && \
     mkdir -p "/etc/entrypoint/conf.d" && \
     mkdir -p "$KETTLE_HOME/.kettle" && \
-    mkdir -p "$KETTLE_HOME/carte" && \
+    mkdir -p "$PDI_PATH/carte" && \
     mkdir -p "$KETTLE_TEMPLATES" && \
     mkdir -p "$CART_TEMPLATES"
 
@@ -69,3 +69,6 @@ ENTRYPOINT ["/usr/bin/pdi-entrypoint"]
 
 # Workdir
 WORKDIR "$PDI_HOME"
+
+# Run Carte !
+CMD carte.sh "$PDI_PATH/carte/carte-config.xml"

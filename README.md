@@ -1,15 +1,10 @@
-# abtpeople/pentaho-di
+# DOCKER PDI
 
 Docker image for Pentaho Data Integration (PDI), also known as Kettle, Community Edition. It supports running Carte as a service, or Pan or Kitchen as batch jobs. It also supports the running of custom scripts to fully customise derived Docker images.
 
-By default, running a container from this image runs `carte.sh` with the configuration file `/pentaho-di/carte_config.xml` that sets up the container as a Carte master node listening on port 8080. The default settings can be changed using environment variables or by supplying a custom configuration file (see *Running Carte* below).
+By default, running a container from this image runs `carte.sh` with the configuration file `$PDI_PATH/carte/carte-config.xml` that sets up the container as a Carte master node listening on port 8080. The default settings can be changed using environment variables or by supplying a custom configuration file (see *Running Carte* below).
 
 Alternatively, this image can be used as a base image to run specific PDI jobs or transformations. The examples below illustrate how this can be done.
-
-## Supported Tags and Links to Dockerfiles
-
-* [`5.2.0.0-209`](https://github.com/abtpeople/docker-pentaho-di/blob/5.2.0.0-209/docker/Dockerfile), [`5.2`](https://github.com/abtpeople/docker-pentaho-di/blob/5.2/docker/Dockerfile)
-* [`5.3.0.0-213`](https://github.com/abtpeople/docker-pentaho-di/blob/5.3.0.0-213/docker/Dockerfile), [`5.3`](https://github.com/abtpeople/docker-pentaho-di/blob/5.3/docker/Dockerfile), [`latest`](https://github.com/abtpeople/docker-pentaho-di/blob/master/docker/Dockerfile)
 
 ## Environment Variables
 
@@ -33,7 +28,7 @@ If `CARTE_INCLUDE_MASTERS` is `'Y'`, then these additional environment variables
 * `CARTE_MASTER_PASSWORD`: The password of the master node *(default: cluster)*
 * `CARTE_MASTER_IS_MASTER`: Whether this master node is a master node *(default: Y)*
 
-These environment variables are used to set up a Carte configuration file at `/pentaho-di/carte_config.xml`. If `CARTE_INCLUDE_MASTERS` is `'N'` (the default), then `carte_config.xml` will contain the following:
+These environment variables are used to set up a Carte configuration file at `$PDI_PATH/carte/carte-config.xml`. If `CARTE_INCLUDE_MASTERS` is `'N'` (the default), then `carte-config.xml` will contain the following:
 
 ```xml
 <slave_config>
@@ -81,19 +76,19 @@ Otherwise, it will contain:
 This image can be used to run Carte as a long-running service, by simply using `docker run`:
 
 ```bash
-docker run -d -p=8080:8080 abtpeople/pentaho-di
+docker run -d -p=8080:8080 fabiobatsilva/pentaho-data-integration
 ```
 
 The Carte configuration can be customised using environment variables, as described above:
 
 ```bash
-docker run -d -p=8080:8080 -e CARTE_NAME=mycarte -e CARTE_USER=john -e CARTE_PASSWORD=83h7c2 abtpeople/pentaho-di
+docker run -d -p=8080:8080 -e CARTE_NAME=mycarte -e CARTE_USER=john -e CARTE_PASSWORD=83h7c2 fabiobatsilva/pentaho-data-integration
 ```
 
 For more advanced Carte configuration, create a new Dockerfile and supply a custom Carte configuration file. See [Carte Configuration](http://wiki.pentaho.com/display/EAI/Carte+Configuration) for available configuration options.
 
 ```dockerfile
-FROM abtpeople/pentaho-di
+FROM fabiobatsilva/pentaho-data-integration
 
 COPY my_carte_config.xml /my_carte_config.xml
 
@@ -112,12 +107,12 @@ For example, in order to run jobs and transformations from a file-based reposito
 <?xml version="1.0" encoding="UTF-8"?>
 <repositories>
   <repository>
-    <id>KettleFileRepository</id>
     <name>my_pdi_repo</name>
-    <description>My PDI Repository</description>
-    <base_directory>/pentaho-di/repo</base_directory>
     <read_only>N</read_only>
+    <id>KettleFileRepository</id>
     <hides_hidden_files>N</hides_hidden_files>
+    <description>My PDI Repository</description>
+    <base_directory>$PDI_PATH/repo/</base_directory>
   </repository>
 </repositories>
 ```
@@ -125,7 +120,7 @@ For example, in order to run jobs and transformations from a file-based reposito
 Then, assuming the transformations and jobs are in the `hostrepo` folder on the host machine, copy them to the `base_directory` in the image, and set up `CMD` to run the default job.
 
 ```dockerfile
-FROM abtpeople/pentaho-di
+FROM fabiobatsilva/pentaho-data-integration
 
 COPY .kettle/repositories.xml $KETTLE_HOME/.kettle/repositories.xml
 
@@ -154,14 +149,14 @@ See the [Pan](http://wiki.pentaho.com/display/EAI/Pan+User+Documentation) and [K
 
 This image allows for full configuration and customisation via custom scripts. For example, a script can be used to clone a Git repository containing the transformations and jobs to be run.
 
-To use custom scripts, name them with a `.sh` extension, and copy them to the `/docker-entrypoint.d` folder. For example:
+To use custom scripts, name them with a `.sh` extension, and copy them to the `/etc/entrypoint/conf.d/` folder. For example:
 
 ```dockerfile
-FROM abtpeople/pentaho-di
+FROM fabiobatsilva/pentaho-data-integration
 
-COPY script1.sh /docker-entrypoint.d/
-COPY script2.sh /docker-entrypoint.d/
-COPY script3.sh /docker-entrypoint.d/
+COPY script1.sh /etc/entrypoint/conf.d/
+COPY script2.sh /etc/entrypoint/conf.d/
+COPY script3.sh /etc/entrypoint/conf.d
 
 ...
 ```

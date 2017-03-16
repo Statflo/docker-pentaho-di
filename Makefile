@@ -1,4 +1,4 @@
-VERSION := 7.0.0-1
+VERSION := 7.0.0-latest
 IMAGE   := fabiobatsilva/pentaho-data-integration:$(VERSION)
 
 build:
