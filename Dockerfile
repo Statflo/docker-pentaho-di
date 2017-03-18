@@ -61,6 +61,9 @@ RUN curl -L "$MYSQL_CONNECTOR_DOWNLOAD_URL" | tar -xz -C /tmp/ && \
 # Copy carte templates
 COPY carte*.xml "$CART_TEMPLATES/"
 
+# Copy carte healthcheck
+COPY carte-healthcheck.sh /usr/bin/carte-healthcheck
+
 # Copy entrypoint
 COPY entrypoint.sh /usr/bin/pdi-entrypoint
 
