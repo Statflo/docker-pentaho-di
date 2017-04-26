@@ -2,6 +2,7 @@ FROM java:8-jre
 
 LABEL maintainer "Aloysius Lim"
 LABEL maintainer "Fabio B. Silva <fabio.bat.silva@gmail.com>"
+LABEL maintainer "Clive Zagno <clivez@gmail.com>"
 
 # Build Args
 ARG PDI_RELEASE="7.0"
@@ -39,7 +40,7 @@ ENV CARTE_MASTER_IS_MASTER  "Y"
 
 # Install deps
 RUN apt-get update \
-    && apt-get install -y libwebkitgtk-1.0-0 gettext-base \
+    && apt-get install -y libwebkitgtk-1.0-0 gettext-base vim cron \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PDI
