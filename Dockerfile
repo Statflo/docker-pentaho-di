@@ -12,6 +12,7 @@ ARG MYSQL_CONNECTOR_VERSION="5.1.41"
 ARG PDI_HOME="$PENTAHO_DIR/data-integration"
 ARG PDI_DOWNLOAD_URL="http://downloads.sourceforge.net/project/pentaho/Data%20Integration/$PDI_RELEASE/pdi-ce-$PDI_VERSION.zip"
 ARG MYSQL_CONNECTOR_DOWNLOAD_URL="https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-$MYSQL_CONNECTOR_VERSION.tar.gz"
+ARG REDSHIFT_JDBC_DOWNLOAD_URL="https://s3.amazonaws.com/redshift-downloads/drivers/RedshiftJDBC4-1.2.1.1001.jar"
 
 # Read only variables
 ENV PDI_PATH         "/etc/pdi"
@@ -58,6 +59,10 @@ RUN curl -L "$MYSQL_CONNECTOR_DOWNLOAD_URL" | tar -xz -C /tmp/ && \
 	mv "/tmp/mysql-connector-java-$MYSQL_CONNECTOR_VERSION/mysql-connector-java-$MYSQL_CONNECTOR_VERSION-bin.jar" \
 		"$PDI_HOME/lib/mysql-connector-$MYSQL_CONNECTOR_VERSION.jar" && \
 	rm -rf "/tmp/mysql-connector-java-$MYSQL_CONNECTOR_VERSION"
+
+# Install Redshift drivers
+RUN curl -L "$REDSHIFT_JDBC_DOWNLOAD_URL" -o /tmp/redshift_jdbc.jar && \
+	mv "/tmp/redshift_jdbc.jar" "$PDI_HOME/lib/redshift_jdbc.jar"
 
 # Copy carte templates
 COPY carte*.xml "$CART_TEMPLATES/"
