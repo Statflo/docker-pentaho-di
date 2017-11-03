@@ -12,7 +12,7 @@ ARG MYSQL_CONNECTOR_VERSION="5.1.41"
 ARG PDI_HOME="$PENTAHO_DIR/data-integration"
 ARG PDI_DOWNLOAD_URL="http://downloads.sourceforge.net/project/pentaho/Data%20Integration/$PDI_RELEASE/pdi-ce-$PDI_VERSION.zip"
 ARG MYSQL_CONNECTOR_DOWNLOAD_URL="https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-$MYSQL_CONNECTOR_VERSION.tar.gz"
-ARG REDSHIFT_JDBC_DOWNLOAD_URL="https://s3.amazonaws.com/redshift-downloads/drivers/RedshiftJDBC4-1.2.1.1001.jar"
+ARG REDSHIFT_JDBC_DOWNLOAD_URL="https://s3.amazonaws.com/redshift-downloads/drivers/RedshiftJDBC4-1.2.10.1009.jar"
 
 # Read only variables
 ENV PDI_PATH         "/etc/pdi"
