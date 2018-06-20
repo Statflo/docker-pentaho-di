@@ -1,5 +1,5 @@
-VERSION := 7.0.0
-IMAGE   := zagno/pentaho-data-integration:$(VERSION)
+VERSION := latest
+IMAGE   := docker-pentaho-di:$(VERSION)
 
 build:
 	@docker build $(BUILD_EXT) -t "$(IMAGE)" "$(CURDIR)"

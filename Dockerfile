@@ -41,8 +41,9 @@ ENV CARTE_MASTER_IS_MASTER  "Y"
 
 # Install deps
 RUN apt-get update \
-    && apt-get install -y libwebkitgtk-1.0-0 gettext-base vim cron \
+    && apt-get install -y libwebkitgtk-1.0-0 gettext-base vim cron python3 python3-pip git ssh \
     && rm -rf /var/lib/apt/lists/*
+RUN easy_install3 -U pip
 
 # Install PDI
 RUN curl -L "$PDI_DOWNLOAD_URL" -o "/tmp/pdi-ce-$PDI_VERSION.zip" && \
@@ -63,6 +64,10 @@ RUN curl -L "$MYSQL_CONNECTOR_DOWNLOAD_URL" | tar -xz -C /tmp/ && \
 # Install Redshift drivers
 RUN curl -L "$REDSHIFT_JDBC_DOWNLOAD_URL" -o /tmp/redshift_jdbc.jar && \
 	mv "/tmp/redshift_jdbc.jar" "$PDI_HOME/lib/redshift_jdbc.jar"
+
+# Install xml builder - needed for S3 plugin
+RUN curl -L "http://central.maven.org/maven2/com/jamesmurty/utils/java-xmlbuilder/0.4/java-xmlbuilder-0.4.jar" -o /tmp/java-xmlbuilder-0.4.jar && \
+	mv "/tmp/java-xmlbuilder-0.4.jar" "$PDI_HOME/lib/java-xmlbuilder-0.4.jar"
 
 # Copy carte templates
 COPY carte*.xml "$CART_TEMPLATES/"
