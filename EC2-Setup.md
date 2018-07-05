@@ -1,0 +1,12 @@
+
+- Create EC2 instance with Ubuntu, make sure it has role that can access ECS
+- ssh ubuntu@172.1.1.1
+- sudo  apt-get install unzip python
+- curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+- unzip awscli-bundle.zip
+- sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+- sudo $(sudo aws ecr get-login --no-include-email --region=ca-central-1)
+- https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-16-04
+- sudo docker pull 181017921891.dkr.ecr.ca-central-1.amazonaws.com/docker-pentaho-di
+- echo -e “REGION = ca\nENVIRONMENT = test” > kettle.properties 
+- sudo docker run -d -it --rm -p "8080:8080" -e PENTAHO_DI_JAVA_OPTIONS="-Xms1024m -Xmx8192m -XX:MaxPermSize=256m" -e ENVIRONMENT=test -e REGION=ca -v $(pwd)/kettle.properties:/etc/pdi/.kettle/kettle.properties --name pdi 181017921891.dkr.ecr.ca-central-1.amazonaws.com/docker-pentaho-di 
