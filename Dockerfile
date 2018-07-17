@@ -70,7 +70,7 @@ RUN curl -L "$REDSHIFT_JDBC_DOWNLOAD_URL" -o /tmp/redshift_jdbc.jar && \
 RUN curl -L "http://central.maven.org/maven2/com/jamesmurty/utils/java-xmlbuilder/0.4/java-xmlbuilder-0.4.jar" -o /tmp/java-xmlbuilder-0.4.jar && \
 	mv "/tmp/java-xmlbuilder-0.4.jar" "$PDI_HOME/lib/java-xmlbuilder-0.4.jar"
 
-curl -L $IC_BLOOM_PLUGIN_URL | tar xz -C /tmp && mkdir -p $PDI_HOME/plugins/steps && mv /tmp/ic-filter-plugin $PDI_HOME/plugins/steps/
+RUN curl -L $IC_BLOOM_PLUGIN_URL | tar xz -C /tmp && mkdir -p $PDI_HOME/plugins/steps && mv /tmp/ic-filter-plugin $PDI_HOME/plugins/steps/
 
 # Copy carte templates
 COPY carte*.xml "$CART_TEMPLATES/"
