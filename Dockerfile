@@ -14,6 +14,8 @@ ARG PDI_DOWNLOAD_URL="http://downloads.sourceforge.net/project/pentaho/Data%20In
 ARG MYSQL_CONNECTOR_DOWNLOAD_URL="https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-$MYSQL_CONNECTOR_VERSION.tar.gz"
 ARG REDSHIFT_JDBC_DOWNLOAD_URL="https://s3.amazonaws.com/redshift-downloads/drivers/RedshiftJDBC4-1.2.10.1009.jar"
 ARG IC_BLOOM_PLUGIN_URL="https://github.com/Statflo/pdi-plugin-binaries/raw/master/ic-filter-plugin-2.0.0-SNAPSHOT.tar.gz"
+ARG FILE_METADATA_PLUGIN_URL="https://github.com/Statflo/pdi-plugin-binaries/raw/master/file-metadata-plugin-1.0.0-SNAPSHOT.tar.gz"
+
 
 # Read only variables
 ENV PDI_PATH         "/etc/pdi"
@@ -70,7 +72,11 @@ RUN curl -L "$REDSHIFT_JDBC_DOWNLOAD_URL" -o /tmp/redshift_jdbc.jar && \
 RUN curl -L "http://central.maven.org/maven2/com/jamesmurty/utils/java-xmlbuilder/0.4/java-xmlbuilder-0.4.jar" -o /tmp/java-xmlbuilder-0.4.jar && \
 	mv "/tmp/java-xmlbuilder-0.4.jar" "$PDI_HOME/lib/java-xmlbuilder-0.4.jar"
 
+# Install bloom filter plugin
 RUN curl -L $IC_BLOOM_PLUGIN_URL | tar xz -C /tmp && mkdir -p $PDI_HOME/plugins/steps && mv /tmp/ic-filter-plugin $PDI_HOME/plugins/steps/
+
+# Install file metadata plugin
+RUN curl -L $FILE_METADATA_PLUGIN_URL | tar xz -C /tmp && mkdir -p $PDI_HOME/plugins/steps && mv /tmp/file-metadata-plugin $PDI_HOME/plugins/steps/
 
 # Copy carte templates
 COPY carte*.xml "$CART_TEMPLATES/"
