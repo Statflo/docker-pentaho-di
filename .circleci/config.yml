@@ -1,5 +1,5 @@
 defaults: &defaults
-    working_directory: /tmp/Statflo/docker-pentahi-di
+    working_directory: /tmp/Statflo/docker-pentaho-di
     shell: /bin/bash --login
     machine:
         enabled: true
@@ -24,7 +24,6 @@ jobs:
         - run: make ecr-auth
         - run: make build
         - run: make push VERSION=prod
-        - run: make push VERSION=latest
 
 workflows:
     version: 2
